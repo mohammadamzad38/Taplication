@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../provider/AuthProvider.jsx";
+import toast from "react-hot-toast";
 
 export default function Register() {
   const { createNewUser, setUser } = useContext(AuthContext);
@@ -70,7 +71,17 @@ export default function Register() {
                   Login now ?
                 </a>
               </div>
-              <button className="btn w-full btn-neutral mt-4">
+              <button
+                onClick={() =>
+                  toast.success(
+                    <div className="space-y-2 text-center bg-[#EE6981]">
+                      <p className="text-xl font-bold">Congratulations</p>
+                      <p>Account created successfully</p>
+                    </div>
+                  )
+                }
+                className="btn w-full btn-neutral mt-4"
+              >
                 Create account
               </button>
             </form>

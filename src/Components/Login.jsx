@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { AuthContext } from "../provider/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Login() {
   const { signInUser, setUser } = useContext(AuthContext);
@@ -22,7 +23,7 @@ export default function Login() {
         const user = result.user;
         setUser(user);
 
-        navigate(location.state?.from?.pathname || "/", { replace: true });
+        navigate(location.state ? location.state : "/");
         console.log(user);
       })
       .catch((err) => {
@@ -32,6 +33,7 @@ export default function Login() {
 
   return (
     <div className="container">
+      <Toaster />
       <div className="hero-content my-25 flex-col ">
         <h1 className="text-5xl font-bold mb-10">Login now!</h1>
         <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
@@ -59,7 +61,12 @@ export default function Login() {
                   Create now !!
                 </a>
               </div>
-              <button className="btn w-full btn-neutral mt-4">Login</button>
+              <button
+                onClick={() => toast.success("Your account login successfully")}
+                className="btn w-full btn-neutral mt-4"
+              >
+                Login
+              </button>
             </form>
           </div>
         </div>
