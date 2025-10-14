@@ -12,7 +12,7 @@ export default function Header() {
     <header className="container">
       <div className="flex items-center justify-between p-4">
         <p className="text-5xl font-bold">Logo</p>
-        <div className="space-x-5">
+        <div className="space-x-5 ">
           <NavLink to={"/"}>Home</NavLink>
           <NavLink to={"/start-learning"}>Start-learning</NavLink>
           <NavLink to={"/tutorials"}>Tutorials</NavLink>
@@ -50,7 +50,7 @@ export default function Header() {
                   logout().then(() => {
                     setModal(false);
                     navigate("/login");
-                    toast.success("Log out Succesfully");
+                    toast.success("Logout Succesfully");
                   })
                 }
               >

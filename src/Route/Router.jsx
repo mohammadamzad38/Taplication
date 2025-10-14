@@ -7,6 +7,9 @@ import Learn from "../Components/Learn";
 import Lesson from "../Components/Lesson";
 import PrivetRouter from "./PrivetRouter";
 import Tutorials from "../Components/Tutorials";
+import Profile from "../Components/Profile";
+import About from "../Components/About";
+import Error from "../Components/Error";
 
 export const router = createBrowserRouter([
   {
@@ -39,7 +42,27 @@ export const router = createBrowserRouter([
       },
       {
         path: "tutorials",
-        element: <Tutorials></Tutorials>,
+        element: (
+          <PrivetRouter>
+            <Tutorials></Tutorials>
+          </PrivetRouter>
+        ),
+      },
+      {
+        path: "my-profiles",
+        element: (
+          <PrivetRouter>
+            <Profile></Profile>
+          </PrivetRouter>
+        ),
+      },
+      {
+        path: "about-us",
+        element: <About></About>,
+      },
+      {
+        path: "*",
+        element: <Error></Error>,
       },
     ],
   },
