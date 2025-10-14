@@ -1,9 +1,13 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../provider/AuthProvider.jsx";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
-  const { createNewUser, setUser } = useContext(AuthContext);
+  const { createNewUser, setUser, signInWithGoogle, updateuserProfile } =
+    useContext(AuthContext);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -15,16 +19,42 @@ export default function Register() {
     const photo = form.get("photo");
     const password = form.get("password");
 
-    console.log("ffffffffffffffffff", name, email, password, photo);
+    if (password.length < 6) {
+      setError("Password must be 6 characters or longer");
+      return;
+    }
+
+    if (!/[A-Z]/.test(password)) {
+      setError("Password must have at least one uppercase");
+      return;
+    }
+    if (!/[a-z]/.test(password)) {
+      setError("Password must have at least one lowercase");
+      return;
+    }
 
     createNewUser(email, password)
       .then((result) => {
         const user = result.user;
+        updateuserProfile({ displayName: name, photoURL: photo });
         setUser(user);
+        toast.success("Register successfully");
+        e.target.reset();
+        navigate("/");
+        console.log("ffffffffffffffffff", user);
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const handleSignUpWithGoogle = () => {
+    signInWithGoogle().then((result) => {
+      const user = result.user;
+      setUser(user);
+      toast.success("Successfully SignUp with Google");
+      navigate("/");
+    });
   };
   return (
     <div className="container">
@@ -63,6 +93,11 @@ export default function Register() {
                 className="input"
                 placeholder="password"
               />
+              {error && (
+                <p className="text-red-400 text-xs font-semibold mt-2">
+                  {error}
+                </p>
+              )}
               <div className="text-center mt-4">
                 <a
                   href="/login"
@@ -71,20 +106,16 @@ export default function Register() {
                   Login now ?
                 </a>
               </div>
-              <button
-                onClick={() =>
-                  toast.success(
-                    <div className="space-y-2 text-center bg-[#EE6981]">
-                      <p className="text-xl font-bold">Congratulations</p>
-                      <p>Account created successfully</p>
-                    </div>
-                  )
-                }
-                className="btn w-full btn-neutral mt-4"
-              >
+              <button type="submit" className="btn w-full btn-neutral mt-4">
                 Create account
               </button>
             </form>
+            <button
+              onClick={() => handleSignUpWithGoogle()}
+              className="btn w-full btn-neutral mt-4"
+            >
+              SignUp with Google
+            </button>
           </div>
         </div>
       </div>
